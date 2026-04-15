@@ -37,27 +37,27 @@ export default function LoginPage() {
       justifyContent: 'center',
       background: 'linear-gradient(135deg, #eef1fd 0%, #fff4ec 100%)',
       fontFamily: "'Inter', system-ui, -apple-system, sans-serif",
-      padding: '20px',
+      padding: '16px',
     }}>
       <div style={{
         background: '#fff',
-        borderRadius: '20px',
-        padding: '48px 40px',
+        borderRadius: '16px',
+        padding: '32px 24px',
         maxWidth: '420px',
         width: '100%',
         boxShadow: '0 8px 32px rgba(0,0,0,0.08)',
         border: '1px solid #e5e8f0',
       }}>
         {/* Logo */}
-        <div style={{ textAlign: 'center', marginBottom: '32px' }}>
+        <div style={{ textAlign: 'center', marginBottom: '24px' }}>
           <img
             src="/LOGO_SOLID (3).png"
             alt="HFSE International School"
-            style={{ height: '48px', marginBottom: '16px' }}
+            style={{ height: '40px', marginBottom: '12px' }}
             onError={(e) => { e.target.style.display = 'none'; }}
           />
           <h1 style={{
-            fontSize: '22px',
+            fontSize: '20px',
             fontWeight: 800,
             color: '#0f172a',
             letterSpacing: '-0.5px',
@@ -65,7 +65,7 @@ export default function LoginPage() {
           }}>
             Marketing <span style={{ color: '#1f45c7' }}>Dashboard</span>
           </h1>
-          <p style={{ fontSize: '13px', color: '#64748b', margin: 0 }}>
+          <p style={{ fontSize: '12px', color: '#64748b', margin: 0 }}>
             HFSE International School · Q1 2026
           </p>
         </div>

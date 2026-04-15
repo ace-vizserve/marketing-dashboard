@@ -345,7 +345,7 @@ export default function Dashboard({ userEmail }) {
       <nav className="nav">
         <div className="nav-logo">
           <img src="/LOGO_SOLID (3).png" alt="HFSE International School" onError={(e) => { e.target.style.display = 'none'; }} />
-          <span style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text)' }}>HFSE International School</span>
+          <span style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', minWidth: 0 }}>HFSE International School</span>
         </div>
         <ul className="nav-links">
           <li><a href="#overview">Overview</a></li>
@@ -358,7 +358,7 @@ export default function Dashboard({ userEmail }) {
           <li><a href="#posts">Posts</a></li>
           <li><a href="#recommendations">Actions</a></li>
         </ul>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
           <span className="nav-badge">Q1 2026</span>
           <button className="signout-btn" onClick={handleSignOut}>Sign Out</button>
         </div>
@@ -391,7 +391,7 @@ export default function Dashboard({ userEmail }) {
               <div className="section-subtitle">Key performance indicators across all marketing channels, Q1 2026</div>
             </div>
           </div>
-          <div className="kpi-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(185px, 1fr))' }}>
+          <div className="kpi-grid">
             <div className="kpi-card primary">
               <div className="kpi-label">Total Social Reach</div>
               <div className="kpi-value">175,151</div>
