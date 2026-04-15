@@ -1,0 +1,1976 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HFSE International School — Q1 2026 Marketing Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+    /* ── Reset & Base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --primary:    #1f45c7;
+      --primary-light: #eef1fd;
+      --secondary:  #fd8735;
+      --secondary-light: #fff4ec;
+      --bg:         #ffffff;
+      --surface:    #f8f9ff;
+      --border:     #e5e8f0;
+      --text:       #0f172a;
+      --muted:      #64748b;
+      --up:         #16a34a;
+      --up-bg:      #f0fdf4;
+      --down:       #dc2626;
+      --down-bg:    #fef2f2;
+      --fb:         #1877F2;
+      --li:         #0A66C2;
+      --radius:     16px;
+      --shadow:     0 1px 4px rgba(0,0,0,0.07);
+      --shadow-md:  0 4px 16px rgba(0,0,0,0.09);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    /* ── Sticky Nav ── */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 52px;
+    }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .nav-logo img {
+      height: 28px;
+      width: auto;
+      object-fit: contain;
+    }
+    .nav-links {
+      display: flex;
+      gap: 4px;
+      list-style: none;
+    }
+    .nav-links a {
+      display: block;
+      padding: 5px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+      text-decoration: none;
+      border-radius: 8px;
+      transition: all 0.2s;
+    }
+    .nav-links a:hover { color: var(--primary); background: var(--primary-light); }
+    .nav-badge {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--primary);
+      background: var(--primary-light);
+      padding: 4px 12px;
+      border-radius: 20px;
+      letter-spacing: 0.5px;
+    }
+
+    /* ── Page Header ── */
+    .page-header {
+      padding: 48px 32px 36px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    .page-header-left {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .header-logo {
+      height: 56px;
+      width: auto;
+      object-fit: contain;
+    }
+    .header-text h1 {
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--text);
+      letter-spacing: -0.5px;
+      line-height: 1.2;
+    }
+    .header-text h1 span { color: var(--primary); }
+    .header-text p {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+    .header-meta {
+      text-align: right;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .header-meta strong { color: var(--text); font-weight: 600; }
+
+    /* ── Main Layout ── */
+    .main { max-width: 1280px; margin: 0 auto; padding: 40px 32px 80px; }
+
+    /* ── Section ── */
+    .section { margin-bottom: 60px; }
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .section-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+    .section-icon.blue  { background: var(--primary-light); color: var(--primary); }
+    .section-icon.orange { background: var(--secondary-light); color: var(--secondary); }
+    .section-icon.green { background: #f0fdf4; color: #16a34a; }
+    .section-icon.purple { background: #f5f3ff; color: #7c3aed; }
+    .section-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .section-subtitle {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 1px;
+    }
+    hr.divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 48px 0;
+    }
+
+    /* ── KPI Grid ── */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+    .kpi-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px 22px;
+      box-shadow: var(--shadow);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .kpi-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+    .kpi-card.primary { background: var(--primary); border-color: var(--primary); color: #fff; }
+    .kpi-card.primary .kpi-label { color: rgba(255,255,255,0.75); }
+    .kpi-card.primary .kpi-value { color: #fff; }
+    .kpi-card.primary .kpi-change { color: rgba(255,255,255,0.8); }
+    .kpi-card.orange { background: var(--secondary); border-color: var(--secondary); color: #fff; }
+    .kpi-card.orange .kpi-label { color: rgba(255,255,255,0.75); }
+    .kpi-card.orange .kpi-value { color: #fff; }
+    .kpi-card.orange .kpi-change { color: rgba(255,255,255,0.8); }
+    .kpi-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+    .kpi-value {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--text);
+      letter-spacing: -0.5px;
+      line-height: 1;
+    }
+    .kpi-value.small { font-size: 22px; }
+    .kpi-change {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+    .kpi-change .up { color: var(--up); font-weight: 600; }
+    .kpi-change .down { color: var(--down); font-weight: 600; }
+
+    /* ── Card ── */
+    .card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: var(--shadow);
+    }
+    .card-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .card-subtitle {
+      font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 20px;
+    }
+
+    /* ── Two/Three Column Grid ── */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    .three-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 20px;
+    }
+    .col-span-2 { grid-column: span 2; }
+
+    /* ── Platform Tabs ── */
+    .platform-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+    .platform-tab {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 18px;
+      border-radius: 10px;
+      border: 1.5px solid var(--border);
+      background: var(--bg);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .platform-tab:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-light); }
+    .platform-tab.active { border-color: var(--primary); color: var(--primary); background: var(--primary-light); }
+    .platform-tab .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+    .dot-fb   { background: #1877F2; }
+    .dot-ig   { background: linear-gradient(135deg, #f09433, #bc1888); }
+    .dot-li   { background: #0A66C2; }
+    .platform-panel { display: none; }
+    .platform-panel.active { display: block; }
+
+    /* ── Month Filter ── */
+    .month-filter {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .month-btn {
+      padding: 5px 14px;
+      border-radius: 8px;
+      border: 1.5px solid var(--border);
+      background: var(--bg);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.18s;
+    }
+    .month-btn:hover  { border-color: var(--primary); color: var(--primary); }
+    .month-btn.active { border-color: var(--primary); color: var(--primary); background: var(--primary-light); }
+
+    /* ── Demographics ── */
+    .demo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 24px; }
+    .gender-row { display: flex; gap: 16px; margin-bottom: 20px; }
+    .gender-block { flex: 1; text-align: center; }
+    .gender-pct { font-size: 28px; font-weight: 800; letter-spacing: -0.5px; }
+    .gender-pct.f { color: var(--primary); }
+    .gender-pct.m { color: var(--secondary); }
+    .gender-label { font-size: 11px; font-weight: 600; text-transform: uppercase; color: var(--muted); margin-top: 2px; }
+    .demo-bar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+    .demo-bar-label { font-size: 12px; font-weight: 600; color: var(--muted); width: 40px; flex-shrink: 0; }
+    .demo-bar-track { flex: 1; height: 8px; background: var(--surface); border-radius: 4px; overflow: hidden; }
+    .demo-bar-fill  { height: 100%; border-radius: 4px; background: var(--primary); }
+    .demo-bar-val   { font-size: 12px; font-weight: 600; color: var(--text); width: 40px; text-align: right; flex-shrink: 0; }
+    .geo-list { list-style: none; }
+    .geo-item { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--border); }
+    .geo-item:last-child { border-bottom: none; }
+    .geo-flag { font-size: 16px; flex-shrink: 0; }
+    .geo-name { flex: 1; font-size: 13px; font-weight: 500; }
+    .geo-pct  { font-size: 12px; font-weight: 700; color: var(--primary); }
+    .geo-bar  { width: 60px; height: 4px; background: var(--surface); border-radius: 2px; overflow: hidden; }
+    .geo-bar-fill { height: 100%; background: var(--primary); border-radius: 2px; }
+    .demo-platform-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: var(--muted);
+      padding: 6px 10px;
+      background: var(--surface);
+      border-radius: 6px;
+      display: inline-block;
+      margin-bottom: 12px;
+    }
+
+    /* ── Email Table ── */
+    .email-table-wrap { overflow-x: auto; }
+    table.email-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    table.email-table th {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--muted);
+      padding: 10px 12px;
+      border-bottom: 2px solid var(--border);
+      text-align: left;
+      white-space: nowrap;
+    }
+    table.email-table td { padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+    table.email-table tr:last-child td { border-bottom: none; }
+    table.email-table tr:hover td { background: var(--surface); }
+    .email-row-hidden { display: none; }
+    .month-tag {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      white-space: nowrap;
+    }
+    .month-tag.jan { background: var(--primary-light); color: var(--primary); }
+    .month-tag.feb { background: #fff4ec; color: #c05c00; }
+    .month-tag.mar { background: #f0fdf4; color: #16a34a; }
+    .open-bar-track { background: var(--surface); border-radius: 3px; height: 5px; margin-top: 4px; overflow: hidden; }
+    .open-bar-fill  { height: 100%; border-radius: 3px; background: var(--primary); }
+    .show-all-btn {
+      display: block;
+      margin: 14px auto 0;
+      padding: 7px 20px;
+      border-radius: 8px;
+      border: 1.5px solid var(--border);
+      background: var(--bg);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--primary);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .show-all-btn:hover { background: var(--primary-light); border-color: var(--primary); }
+
+    /* ── Top Posts Grid ── */
+    .posts-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .post-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: var(--shadow);
+      transition: transform 0.2s, box-shadow 0.2s;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .post-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+    .post-card.top { border-color: var(--primary); border-width: 2px; }
+    .post-card-header { display: flex; align-items: center; gap: 10px; }
+    .rank-badge {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+    .rank-badge.gold   { background: #fef3c7; color: #d97706; }
+    .rank-badge.silver { background: #f1f5f9; color: #475569; }
+    .rank-badge.bronze { background: #fff7ed; color: #9a3412; }
+    .rank-badge.plain  { background: var(--surface); color: var(--muted); }
+    .post-platform-tag {
+      font-size: 10px;
+      font-weight: 700;
+      color: #1877F2;
+      background: #eef5ff;
+      padding: 3px 8px;
+      border-radius: 6px;
+      letter-spacing: 0.4px;
+    }
+    .post-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      line-height: 1.4;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .post-metrics { display: flex; gap: 16px; flex-wrap: wrap; }
+    .post-metric { }
+    .post-metric-val { font-size: 16px; font-weight: 800; color: var(--text); }
+    .post-metric-val.primary { color: var(--primary); }
+    .post-metric-lbl { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.4px; color: var(--muted); }
+    .post-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--primary);
+      text-decoration: none;
+      padding: 6px 12px;
+      border-radius: 8px;
+      border: 1.5px solid var(--primary-light);
+      background: var(--primary-light);
+      margin-top: auto;
+      transition: all 0.2s;
+      align-self: flex-start;
+    }
+    .post-link:hover { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+    /* ── Recommendations ── */
+    .reco-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+    .reco-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: var(--shadow);
+      border-left: 4px solid var(--border);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .reco-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+    .reco-card.high   { border-left-color: var(--primary); }
+    .reco-card.medium { border-left-color: var(--secondary); }
+    .reco-card.insight { border-left-color: #16a34a; }
+    .reco-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+    .reco-badge {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 3px 8px;
+      border-radius: 6px;
+    }
+    .reco-badge.high   { background: var(--primary-light); color: var(--primary); }
+    .reco-badge.medium { background: var(--secondary-light); color: #c05c00; }
+    .reco-badge.insight { background: #f0fdf4; color: #16a34a; }
+    .reco-icon { font-size: 18px; }
+    .reco-title { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+    .reco-body  { font-size: 12px; color: var(--muted); line-height: 1.6; }
+    .reco-metric {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text);
+      background: var(--surface);
+      padding: 2px 8px;
+      border-radius: 5px;
+      margin-top: 8px;
+    }
+
+    /* ── Spend doughnut center label ── */
+    .doughnut-wrap { position: relative; display: flex; align-items: center; justify-content: center; }
+    .doughnut-center {
+      position: absolute;
+      text-align: center;
+      pointer-events: none;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -58%);
+    }
+    .doughnut-center-val { font-size: 20px; font-weight: 800; color: var(--text); letter-spacing: -0.5px; }
+    .doughnut-center-lbl { font-size: 10px; color: var(--muted); font-weight: 600; margin-top: 1px; }
+
+    /* ── Source breakdown list ── */
+    .source-list { list-style: none; margin-top: 16px; }
+    .source-item { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 1px solid var(--border); }
+    .source-item:last-child { border-bottom: none; }
+    .source-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+    .source-name { flex: 1; font-size: 13px; font-weight: 500; }
+    .source-count { font-size: 16px; font-weight: 800; color: var(--text); }
+    .source-pct { font-size: 11px; color: var(--muted); width: 38px; text-align: right; }
+    .source-bar-track { width: 80px; height: 5px; background: var(--surface); border-radius: 3px; overflow: hidden; }
+    .source-bar-fill  { height: 100%; border-radius: 3px; }
+
+    /* ── Website sub-header ── */
+    .site-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border);
+    }
+    .site-icon {
+      width: 32px; height: 32px;
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+    .site-icon.blue { background: var(--primary-light); color: var(--primary); }
+    .site-icon.teal { background: #f0fdfb; color: #0d9488; }
+    .site-name { font-size: 13px; font-weight: 700; color: var(--text); }
+    .site-url  { font-size: 11px; color: var(--muted); }
+
+    /* ── Footer ── */
+    .footer {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      padding: 24px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .footer-logo img { height: 20px; opacity: 0.5; }
+    .footer-text { font-size: 11px; color: var(--muted); line-height: 1.6; }
+    .footer-text strong { color: var(--text); }
+
+    /* ── Responsive ── */
+    @media (max-width: 1000px) {
+      .three-col { grid-template-columns: 1fr 1fr; }
+      .posts-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 720px) {
+      .nav-links { display: none; }
+      .main { padding: 24px 16px 60px; }
+      .page-header { padding: 24px 16px; flex-direction: column; align-items: flex-start; }
+      .two-col, .three-col, .demo-grid, .posts-grid { grid-template-columns: 1fr; }
+      .col-span-2 { grid-column: span 1; }
+      .reco-grid { grid-template-columns: 1fr; }
+      .kpi-grid  { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 480px) {
+      .kpi-grid  { grid-template-columns: 1fr 1fr; }
+      .kpi-value { font-size: 22px; }
+      .nav-badge { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════ STICKY NAV ══ -->
+<nav class="nav">
+  <div class="nav-logo">
+    <img src="LOGO_SOLID (3).png" alt="HFSE International School" onerror="this.style.display='none'" />
+    <span style="font-size:13px;font-weight:700;color:var(--text)">HFSE International School</span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#overview">Overview</a></li>
+    <li><a href="#social">Social</a></li>
+    <li><a href="#website">Website</a></li>
+    <li><a href="#leads">Leads</a></li>
+    <li><a href="#email">Email</a></li>
+    <li><a href="#spend">Spend</a></li>
+    <li><a href="#conversion">Conversion</a></li>
+    <li><a href="#posts">Posts</a></li>
+    <li><a href="#recommendations">Actions</a></li>
+  </ul>
+  <span class="nav-badge">Q1 2026</span>
+</nav>
+
+<!-- ══════════════════════════════════════════ PAGE HEADER ══ -->
+<header class="page-header">
+  <div class="page-header-left">
+    <img src="LOGO_SOLID (3).png" alt="HFSE International School" class="header-logo" onerror="this.style.display='none'" />
+    <div class="header-text">
+      <h1>Marketing Performance <span>Dashboard</span></h1>
+      <p>HFSE International School &nbsp;·&nbsp; Q1 2026 &nbsp;·&nbsp; January – March 2026</p>
+    </div>
+  </div>
+  <div class="header-meta">
+    <strong>Generated</strong><br>April 14, 2026<br>
+    <span style="margin-top:4px;display:inline-block;padding:4px 10px;border-radius:6px;background:var(--primary-light);color:var(--primary);font-weight:700;font-size:11px;">Q1 2026 Report</span>
+  </div>
+</header>
+
+<!-- ══════════════════════════════════════════ MAIN ══ -->
+<main class="main">
+
+  <!-- ─── 1. EXECUTIVE SUMMARY ─── -->
+  <section class="section" id="overview">
+    <div class="section-header">
+      <div class="section-icon blue">📊</div>
+      <div>
+        <div class="section-title">Executive Summary</div>
+        <div class="section-subtitle">Key performance indicators across all marketing channels, Q1 2026</div>
+      </div>
+    </div>
+    <div class="kpi-grid" style="grid-template-columns: repeat(auto-fit, minmax(185px, 1fr));">
+      <div class="kpi-card primary">
+        <div class="kpi-label">Total Social Reach</div>
+        <div class="kpi-value">175,151</div>
+        <div class="kpi-change">FB 160,565 + IG 14,586</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Website Views</div>
+        <div class="kpi-value">49,219</div>
+        <div class="kpi-change">hfse.edu.sg · Q1 2026</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">ISA Portal Users</div>
+        <div class="kpi-value">5,992</div>
+        <div class="kpi-change">isa.hfse.edu.sg · Q1 2026</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Admission Leads</div>
+        <div class="kpi-value">119</div>
+        <div class="kpi-change">All channels combined</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Avg Email Open Rate</div>
+        <div class="kpi-value">54.3%</div>
+        <div class="kpi-change"><span class="up">↑ 2.6× industry avg (21%)</span></div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Top Post Views</div>
+        <div class="kpi-value">7,466</div>
+        <div class="kpi-change">EduTrust certification reel</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Conversion Rate</div>
+        <div class="kpi-value">1.68%</div>
+        <div class="kpi-change">2 enrolments from 119 leads</div>
+      </div>
+      <div class="kpi-card orange">
+        <div class="kpi-label">Q1 Marketing Spend</div>
+        <div class="kpi-value small">$7,224</div>
+        <div class="kpi-change">Jan–Mar 2026 total</div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ─── 2. SOCIAL MEDIA ─── -->
+  <section class="section" id="social">
+    <div class="section-header">
+      <div class="section-icon blue">📱</div>
+      <div>
+        <div class="section-title">Social Media Performance</div>
+        <div class="section-subtitle">Facebook, Instagram & LinkedIn · Q1 2026</div>
+      </div>
+    </div>
+
+    <!-- Platform Tabs -->
+    <div class="platform-tabs">
+      <button class="platform-tab active" data-target="fb-panel">
+        <span class="dot dot-fb"></span> Facebook
+      </button>
+      <button class="platform-tab" data-target="ig-panel">
+        <span class="dot dot-ig"></span> Instagram
+      </button>
+      <button class="platform-tab" data-target="li-panel">
+        <span class="dot dot-li"></span> LinkedIn
+      </button>
+    </div>
+
+    <!-- ── FACEBOOK PANEL ── -->
+    <div class="platform-panel active" id="fb-panel">
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-label">Q1 Views</div>
+          <div class="kpi-value">322,064</div>
+          <div class="kpi-change"><span class="up">↑ Mar best month (141,988)</span></div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Q1 Reach</div>
+          <div class="kpi-value">160,565</div>
+          <div class="kpi-change"><span class="up">↑ +107% Jan→Mar</span></div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Q1 Interactions</div>
+          <div class="kpi-value">3,301</div>
+          <div class="kpi-change"><span class="up">↑ Mar peak: 2,105</span></div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Q1 Link Clicks</div>
+          <div class="kpi-value">1,819</div>
+          <div class="kpi-change">Best: Mar (828)</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Page Visits</div>
+          <div class="kpi-value">15,413</div>
+          <div class="kpi-change">Q1 total</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">New Followers</div>
+          <div class="kpi-value">79</div>
+          <div class="kpi-change"><span class="up">↑ Mar net: +47</span></div>
+        </div>
+      </div>
+
+      <!-- Month Filter -->
+      <div class="month-filter">
+        <button class="month-btn active" data-period="all">All Q1</button>
+        <button class="month-btn" data-period="jan">January</button>
+        <button class="month-btn" data-period="feb">February</button>
+        <button class="month-btn" data-period="mar">March</button>
+      </div>
+
+      <div class="two-col">
+        <div class="card">
+          <div class="card-title">Views & Reach</div>
+          <div class="card-subtitle">Monthly comparison</div>
+          <div style="position:relative;height:220px;"><canvas id="fbTrendChart"></canvas></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Interactions, Link Clicks & Visits</div>
+          <div class="card-subtitle">Monthly engagement breakdown</div>
+          <div style="position:relative;height:220px;"><canvas id="fbEngagementChart"></canvas></div>
+        </div>
+      </div>
+
+      <!-- Demographics -->
+      <div style="margin-top:24px;">
+        <div class="card-title" style="margin-bottom:16px;">Audience Demographics</div>
+        <div class="demo-grid">
+          <div class="card">
+            <div class="demo-platform-label">📘 Facebook Audience</div>
+            <div class="gender-row">
+              <div class="gender-block">
+                <div class="gender-pct f">73.5%</div>
+                <div class="gender-label">Women</div>
+              </div>
+              <div class="gender-block">
+                <div class="gender-pct m">26.5%</div>
+                <div class="gender-label">Men</div>
+              </div>
+            </div>
+            <div class="demo-bar-row"><span class="demo-bar-label">35–44</span><div class="demo-bar-track"><div class="demo-bar-fill" style="width:100%"></div></div><span class="demo-bar-val">44.2%</span></div>
+            <div class="demo-bar-row"><span class="demo-bar-label">45–54</span><div class="demo-bar-track"><div class="demo-bar-fill" style="width:61.7%"></div></div><span class="demo-bar-val">27.3%</span></div>
+            <div class="demo-bar-row"><span class="demo-bar-label">25–34</span><div class="demo-bar-track"><div class="demo-bar-fill" style="width:38.2%"></div></div><span class="demo-bar-val">16.9%</span></div>
+            <div class="demo-bar-row"><span class="demo-bar-label">55–64</span><div class="demo-bar-track"><div class="demo-bar-fill" style="width:12.7%"></div></div><span class="demo-bar-val">5.6%</span></div>
+            <div class="demo-bar-row"><span class="demo-bar-label">65+</span><div class="demo-bar-track"><div class="demo-bar-fill" style="width:8.4%"></div></div><span class="demo-bar-val">3.7%</span></div>
+            <div class="demo-bar-row"><span class="demo-bar-label">18–24</span><div class="demo-bar-track"><div class="demo-bar-fill" style="width:5.2%"></div></div><span class="demo-bar-val">2.3%</span></div>
+          </div>
+          <div class="card">
+            <div class="demo-platform-label">📘 Facebook — Top Countries</div>
+            <ul class="geo-list">
+              <li class="geo-item"><span class="geo-flag">🇵🇭</span><span class="geo-name">Philippines</span><div class="geo-bar"><div class="geo-bar-fill" style="width:100%"></div></div><span class="geo-pct">43.9%</span></li>
+              <li class="geo-item"><span class="geo-flag">🇸🇬</span><span class="geo-name">Singapore</span><div class="geo-bar"><div class="geo-bar-fill" style="width:96.1%"></div></div><span class="geo-pct">42.2%</span></li>
+              <li class="geo-item"><span class="geo-flag">🇨🇦</span><span class="geo-name">Canada</span><div class="geo-bar"><div class="geo-bar-fill" style="width:6.6%"></div></div><span class="geo-pct">2.9%</span></li>
+              <li class="geo-item"><span class="geo-flag">🇦🇺</span><span class="geo-name">Australia</span><div class="geo-bar"><div class="geo-bar-fill" style="width:5.5%"></div></div><span class="geo-pct">2.4%</span></li>
+              <li class="geo-item"><span class="geo-flag">🇺🇸</span><span class="geo-name">United States</span><div class="geo-bar"><div class="geo-bar-fill" style="width:5.0%"></div></div><span class="geo-pct">2.2%</span></li>
+              <li class="geo-item"><span class="geo-flag">🇦🇪</span><span class="geo-name">UAE</span><div class="geo-bar"><div class="geo-bar-fill" style="width:2.7%"></div></div><span class="geo-pct">1.2%</span></li>
+            </ul>
+            <div style="margin-top:16px; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; color:var(--muted); margin-bottom:8px;">Top Cities</div>
+            <ul class="geo-list">
+              <li class="geo-item"><span class="geo-flag">🇸🇬</span><span class="geo-name">Singapore, SG</span><div class="geo-bar"><div class="geo-bar-fill" style="width:100%"></div></div><span class="geo-pct">41.0%</span></li>
+              <li class="geo-item"><span class="geo-flag">🇵🇭</span><span class="geo-name">Quezon City, PH</span><div class="geo-bar"><div class="geo-bar-fill" style="width:5.1%"></div></div><span class="geo-pct">2.1%</span></li>
+              <li class="geo-item"><span class="geo-flag">🇵🇭</span><span class="geo-name">San Fernando, PH</span><div class="geo-bar"><div class="geo-bar-fill" style="width:4.6%"></div></div><span class="geo-pct">1.9%</span></li>
+              <li class="geo-item"><span class="geo-flag">🇵🇭</span><span class="geo-name">Santa Rosa, PH</span><div class="geo-bar"><div class="geo-bar-fill" style="width:3.9%"></div></div><span class="geo-pct">1.6%</span></li>
+              <li class="geo-item"><span class="geo-flag">🇵🇭</span><span class="geo-name">Manila, PH</span><div class="geo-bar"><div class="geo-bar-fill" style="width:3.7%"></div></div><span class="geo-pct">1.5%</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div><!-- /fb-panel -->
+
+    <!-- ── INSTAGRAM PANEL ── -->
+    <div class="platform-panel" id="ig-panel">
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-label">Q1 Views</div>
+          <div class="kpi-value">43,597</div>
+          <div class="kpi-change">Best: Jan (17,532)</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Q1 Reach</div>
+          <div class="kpi-value">14,586</div>
+          <div class="kpi-change"><span class="down">↓ 9% of FB reach</span></div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Q1 Interactions</div>
+          <div class="kpi-value">1,110</div>
+          <div class="kpi-change"><span class="up">↑ Mar best: 595</span></div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Q1 Link Clicks</div>
+          <div class="kpi-value">99</div>
+          <div class="kpi-change">Best: Jan (63)</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Profile Visits</div>
+          <div class="kpi-value">1,280</div>
+          <div class="kpi-change">Q1 total</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">New Followers</div>
+          <div class="kpi-value">16</div>
+          <div class="kpi-change">Feb +6, Mar +6</div>
+        </div>
+      </div>
+      <div class="two-col">
+        <div class="card">
+          <div class="card-title">Views & Reach</div>
+          <div class="card-subtitle">Monthly comparison</div>
+          <div style="position:relative;height:220px;"><canvas id="igTrendChart"></canvas></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Interactions, Link Clicks & Visits</div>
+          <div class="card-subtitle">Monthly engagement breakdown</div>
+          <div style="position:relative;height:220px;"><canvas id="igEngagementChart"></canvas></div>
+        </div>
+      </div>
+      <div style="margin-top:24px;" class="card">
+        <div class="demo-platform-label">📸 Instagram — Top Countries</div>
+        <div class="two-col">
+          <ul class="geo-list">
+            <li class="geo-item"><span class="geo-flag">🇸🇬</span><span class="geo-name">Singapore</span><div class="geo-bar"><div class="geo-bar-fill" style="width:100%"></div></div><span class="geo-pct">65.2%</span></li>
+            <li class="geo-item"><span class="geo-flag">🇵🇭</span><span class="geo-name">Philippines</span><div class="geo-bar"><div class="geo-bar-fill" style="width:25.9%"></div></div><span class="geo-pct">16.9%</span></li>
+            <li class="geo-item"><span class="geo-flag">🇨🇦</span><span class="geo-name">Canada</span><div class="geo-bar"><div class="geo-bar-fill" style="width:4.1%"></div></div><span class="geo-pct">2.7%</span></li>
+            <li class="geo-item"><span class="geo-flag">🇮🇩</span><span class="geo-name">Indonesia</span><div class="geo-bar"><div class="geo-bar-fill" style="width:2.9%"></div></div><span class="geo-pct">1.9%</span></li>
+            <li class="geo-item"><span class="geo-flag">🇦🇺</span><span class="geo-name">Australia</span><div class="geo-bar"><div class="geo-bar-fill" style="width:2.8%"></div></div><span class="geo-pct">1.8%</span></li>
+          </ul>
+          <div>
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--muted);margin-bottom:10px;">Gender Split</div>
+            <div class="gender-row">
+              <div class="gender-block"><div class="gender-pct f">73.5%</div><div class="gender-label">Women</div></div>
+              <div class="gender-block"><div class="gender-pct m">26.5%</div><div class="gender-label">Men</div></div>
+            </div>
+            <p style="font-size:12px;color:var(--muted);margin-top:10px;line-height:1.6;">Instagram audience closely mirrors Facebook demographics, with Singapore leading (65.2%) compared to Facebook's split between Singapore (42.2%) and Philippines (43.9%).</p>
+          </div>
+        </div>
+      </div>
+    </div><!-- /ig-panel -->
+
+    <!-- ── LINKEDIN PANEL ── -->
+    <div class="platform-panel" id="li-panel">
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-label">Q1 Impressions</div>
+          <div class="kpi-value">1,935</div>
+          <div class="kpi-change"><span class="up">↑ +502% Jan→Mar</span></div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Unique Impressions</div>
+          <div class="kpi-value">660</div>
+          <div class="kpi-change">Best: Mar (449)</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Q1 Clicks</div>
+          <div class="kpi-value">111</div>
+          <div class="kpi-change">Best: Mar (75)</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Reactions</div>
+          <div class="kpi-value">45</div>
+          <div class="kpi-change"><span class="up">↑ Mar: 34 of 45</span></div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">New Followers</div>
+          <div class="kpi-value">27</div>
+          <div class="kpi-change"><span class="up">↑ Mar alone: +20</span></div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Page Views</div>
+          <div class="kpi-value">235</div>
+          <div class="kpi-change">Q1 total</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">LinkedIn Monthly Performance</div>
+        <div class="card-subtitle">Impressions, Clicks & Reactions by month — strong March acceleration</div>
+        <div style="position:relative;height:240px;"><canvas id="liChart"></canvas></div>
+      </div>
+      <div style="margin-top:16px;padding:16px 20px;background:var(--primary-light);border-radius:12px;border-left:4px solid var(--primary);">
+        <p style="font-size:13px;font-weight:600;color:var(--primary)">📈 LinkedIn Growth Signal</p>
+        <p style="font-size:12px;color:var(--muted);margin-top:4px;line-height:1.6;">March LinkedIn impressions (1,359) were <strong style="color:var(--text)">6× January's (226)</strong>. This channel is gaining momentum with minimal spend and represents a strong Q2 opportunity for B2B and parent community outreach in Singapore.</p>
+      </div>
+    </div><!-- /li-panel -->
+
+  </section>
+
+  <hr class="divider">
+
+  <!-- ─── 3. WEBSITE ANALYTICS ─── -->
+  <section class="section" id="website">
+    <div class="section-header">
+      <div class="section-icon orange">🌐</div>
+      <div>
+        <div class="section-title">Website Analytics</div>
+        <div class="section-subtitle">hfse.edu.sg & isa.hfse.edu.sg · Q1 2026 · Google Analytics 4</div>
+      </div>
+    </div>
+
+    <!-- hfse.edu.sg -->
+    <div class="card" style="margin-bottom:20px;">
+      <div class="site-header">
+        <div class="site-icon blue">🏠</div>
+        <div>
+          <div class="site-name">hfse.edu.sg</div>
+          <div class="site-url">HFSE Global Education Group — Main website</div>
+        </div>
+      </div>
+      <div class="kpi-grid" style="margin-bottom:28px;">
+        <div class="kpi-card primary">
+          <div class="kpi-label">Total Views</div>
+          <div class="kpi-value">49,219</div>
+          <div class="kpi-change">Q1 2026 · All pages</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">New Users</div>
+          <div class="kpi-value">17,071</div>
+          <div class="kpi-change">First-time visitors</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Engaged Sessions</div>
+          <div class="kpi-value">7,595</div>
+          <div class="kpi-change">Active, quality visits</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Event Count</div>
+          <div class="kpi-value small">138,313</div>
+          <div class="kpi-change">All tracked user events</div>
+        </div>
+      </div>
+      <div class="card-title">Top Pages by Views</div>
+      <div class="card-subtitle" style="margin-bottom:16px;">Q1 2026 · hfse.edu.sg</div>
+      <div style="position:relative;height:280px;"><canvas id="topPagesChart"></canvas></div>
+    </div>
+
+    <!-- isa.hfse.edu.sg -->
+    <div class="card">
+      <div class="site-header">
+        <div class="site-icon teal">🎓</div>
+        <div>
+          <div class="site-name">isa.hfse.edu.sg</div>
+          <div class="site-url">HFSE International School — Admissions portal</div>
+        </div>
+      </div>
+      <div class="kpi-grid" style="margin-bottom:28px;">
+        <div class="kpi-card">
+          <div class="kpi-label">January</div>
+          <div class="kpi-value">2,026</div>
+          <div class="kpi-change">Active users</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">February</div>
+          <div class="kpi-value">1,898</div>
+          <div class="kpi-change"><span class="down">↓ –6.3% vs Jan</span></div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">March</div>
+          <div class="kpi-value">2,068</div>
+          <div class="kpi-change"><span class="up">↑ +9.0% vs Feb</span></div>
+        </div>
+        <div class="kpi-card primary">
+          <div class="kpi-label">Q1 Total</div>
+          <div class="kpi-value">5,992</div>
+          <div class="kpi-change">Active users</div>
+        </div>
+      </div>
+      <div class="card-title">Daily Active Users — Jan 1 to Mar 31, 2026</div>
+      <div class="card-subtitle" style="margin-bottom:16px;">90-day trend · isa.hfse.edu.sg</div>
+      <div style="position:relative;height:200px;"><canvas id="isaChart"></canvas></div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ─── 4. ADMISSION LEADS ─── -->
+  <section class="section" id="leads">
+    <div class="section-header">
+      <div class="section-icon green">🎯</div>
+      <div>
+        <div class="section-title">Admission Leads</div>
+        <div class="section-subtitle">Lead volume by channel · Q1 2026 · 119 total inquiries</div>
+      </div>
+    </div>
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-label">January</div>
+        <div class="kpi-value">45</div>
+        <div class="kpi-change">Best Q1 month</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">February</div>
+        <div class="kpi-value">37</div>
+        <div class="kpi-change"><span class="down">↓ –17.8% vs Jan</span></div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">March</div>
+        <div class="kpi-value">37</div>
+        <div class="kpi-change">Stable vs Feb</div>
+      </div>
+      <div class="kpi-card primary">
+        <div class="kpi-label">Q1 Total</div>
+        <div class="kpi-value">119</div>
+        <div class="kpi-change">All channels combined</div>
+      </div>
+    </div>
+    <div class="two-col">
+      <div class="card">
+        <div class="card-title">Lead Source by Month</div>
+        <div class="card-subtitle">Stacked by channel</div>
+        <div style="position:relative;height:260px;"><canvas id="leadsChart"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Q1 Lead Source Breakdown</div>
+        <div class="card-subtitle">119 total leads</div>
+        <ul class="source-list">
+          <li class="source-item">
+            <span class="source-dot" style="background:#1f45c7"></span>
+            <span class="source-name">Contact Us Form</span>
+            <div class="source-bar-track"><div class="source-bar-fill" style="width:100%;background:#1f45c7"></div></div>
+            <span class="source-count">43</span>
+            <span class="source-pct">36.1%</span>
+          </li>
+          <li class="source-item">
+            <span class="source-dot" style="background:#25D366"></span>
+            <span class="source-name">WhatsApp</span>
+            <div class="source-bar-track"><div class="source-bar-fill" style="width:79.1%;background:#25D366"></div></div>
+            <span class="source-count">34</span>
+            <span class="source-pct">28.6%</span>
+          </li>
+          <li class="source-item">
+            <span class="source-dot" style="background:#a8d8ea"></span>
+            <span class="source-name">Book Open-House Form</span>
+            <div class="source-bar-track"><div class="source-bar-fill" style="width:30.2%;background:#a8d8ea"></div></div>
+            <span class="source-count">13</span>
+            <span class="source-pct">10.9%</span>
+          </li>
+          <li class="source-item">
+            <span class="source-dot" style="background:#6366f1"></span>
+            <span class="source-name">Event Walk-ins</span>
+            <div class="source-bar-track"><div class="source-bar-fill" style="width:27.9%;background:#6366f1"></div></div>
+            <span class="source-count">12</span>
+            <span class="source-pct">10.1%</span>
+          </li>
+          <li class="source-item">
+            <span class="source-dot" style="background:#0084FF"></span>
+            <span class="source-name">Facebook Messenger</span>
+            <div class="source-bar-track"><div class="source-bar-fill" style="width:25.6%;background:#0084FF"></div></div>
+            <span class="source-count">11</span>
+            <span class="source-pct">9.2%</span>
+          </li>
+          <li class="source-item">
+            <span class="source-dot" style="background:#fd8735"></span>
+            <span class="source-name">Phone Call</span>
+            <div class="source-bar-track"><div class="source-bar-fill" style="width:9.3%;background:#fd8735"></div></div>
+            <span class="source-count">4</span>
+            <span class="source-pct">3.4%</span>
+          </li>
+          <li class="source-item">
+            <span class="source-dot" style="background:#e2e8f0"></span>
+            <span class="source-name">Email</span>
+            <div class="source-bar-track"><div class="source-bar-fill" style="width:4.7%;background:#94a3b8"></div></div>
+            <span class="source-count">2</span>
+            <span class="source-pct">1.7%</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ─── 5. EMAIL MARKETING ─── -->
+  <section class="section" id="email">
+    <div class="section-header">
+      <div class="section-icon purple">✉️</div>
+      <div>
+        <div class="section-title">Email Marketing</div>
+        <div class="section-subtitle">9 campaigns via Brevo · Q1 2026 · Avg open rate 54.3% (industry avg ~21%)</div>
+      </div>
+    </div>
+    <div class="two-col" style="margin-bottom:24px;">
+      <div class="kpi-card primary">
+        <div class="kpi-label">Avg Open Rate</div>
+        <div class="kpi-value">54.3%</div>
+        <div class="kpi-change">9 campaigns · Q1 2026</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Best Open Rate</div>
+        <div class="kpi-value">69.4%</div>
+        <div class="kpi-change">Welcome AY2026 · Jan</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Best CTR</div>
+        <div class="kpi-value">13.9%</div>
+        <div class="kpi-change">EduTrust EOI · Mar</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Total Emails Sent</div>
+        <div class="kpi-value small">3,044</div>
+        <div class="kpi-change">Across 9 campaigns</div>
+      </div>
+    </div>
+    <div class="card" style="margin-bottom:20px;">
+      <div class="card-title">Campaign Performance</div>
+      <div class="card-subtitle" style="margin-bottom:16px;">Open rate vs CTR per campaign</div>
+      <div style="position:relative;height:260px;"><canvas id="emailChart"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-title" style="margin-bottom:2px;">All Campaigns</div>
+      <div class="card-subtitle" style="margin-bottom:16px;">Sorted by date · Q1 2026</div>
+      <div class="email-table-wrap">
+        <table class="email-table">
+          <thead>
+            <tr>
+              <th>Month</th>
+              <th>Campaign</th>
+              <th>Recipients</th>
+              <th>Opens</th>
+              <th>Open Rate</th>
+              <th>Clicks</th>
+              <th>CTR</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="month-tag jan">Jan</span></td>
+              <td>Welcome AY2026</td><td>327</td><td>227</td>
+              <td>69.42%<div class="open-bar-track"><div class="open-bar-fill" style="width:69.42%"></div></div></td>
+              <td>0</td><td>0%</td>
+            </tr>
+            <tr>
+              <td><span class="month-tag jan">Jan</span></td>
+              <td>Founder's Message</td><td>294</td><td>179</td>
+              <td>60.88%<div class="open-bar-track"><div class="open-bar-fill" style="width:60.88%"></div></div></td>
+              <td>2</td><td>0.68%</td>
+            </tr>
+            <tr>
+              <td><span class="month-tag feb">Feb</span></td>
+              <td>Jan 2026 Highlights</td><td>338</td><td>193</td>
+              <td>57.1%<div class="open-bar-track"><div class="open-bar-fill" style="width:57.1%"></div></div></td>
+              <td>17</td><td>5.03%</td>
+            </tr>
+            <tr class="email-row-hidden">
+              <td><span class="month-tag feb">Feb</span></td>
+              <td>Virtual Open House</td><td>239</td><td>90</td>
+              <td>37.66%<div class="open-bar-track"><div class="open-bar-fill" style="width:37.66%"></div></div></td>
+              <td>11</td><td>4.6%</td>
+            </tr>
+            <tr class="email-row-hidden">
+              <td><span class="month-tag feb">Feb</span></td>
+              <td>VOH Follow-up</td><td>230</td><td>113</td>
+              <td>49.13%<div class="open-bar-track"><div class="open-bar-fill" style="width:49.13%"></div></div></td>
+              <td>2</td><td>0.87%</td>
+            </tr>
+            <tr class="email-row-hidden">
+              <td><span class="month-tag mar">Mar</span></td>
+              <td>Feb 2026 Highlights</td><td>336</td><td>191</td>
+              <td>56.85%<div class="open-bar-track"><div class="open-bar-fill" style="width:56.85%"></div></div></td>
+              <td>29</td><td>8.63%</td>
+            </tr>
+            <tr class="email-row-hidden">
+              <td><span class="month-tag mar">Mar</span></td>
+              <td>EduTrust Announcement</td><td>404</td><td>228</td>
+              <td>56.44%<div class="open-bar-track"><div class="open-bar-fill" style="width:56.44%"></div></div></td>
+              <td>38</td><td>9.41%</td>
+            </tr>
+            <tr class="email-row-hidden">
+              <td><span class="month-tag mar">Mar</span></td>
+              <td style="font-weight:700;color:var(--primary)">EduTrust EOI ⭐</td><td>424</td><td>274</td>
+              <td>64.62%<div class="open-bar-track"><div class="open-bar-fill" style="width:64.62%;background:var(--secondary)"></div></div></td>
+              <td>59</td><td style="font-weight:700;color:var(--secondary)">13.92%</td>
+            </tr>
+            <tr class="email-row-hidden">
+              <td><span class="month-tag mar">Mar</span></td>
+              <td>Open House (24 Mar)</td><td>252</td><td>92</td>
+              <td>36.51%<div class="open-bar-track"><div class="open-bar-fill" style="width:36.51%"></div></div></td>
+              <td>6</td><td>2.38%</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <button class="show-all-btn" id="showAllBtn">Show all 9 campaigns ↓</button>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ─── 6. MARKETING SPEND ─── -->
+  <section class="section" id="spend">
+    <div class="section-header">
+      <div class="section-icon orange">💰</div>
+      <div>
+        <div class="section-title">Marketing Spend</div>
+        <div class="section-subtitle">Q1 2026 · $7,224.05 total investment</div>
+      </div>
+    </div>
+    <div class="kpi-grid" style="margin-bottom:28px;">
+      <div class="kpi-card orange">
+        <div class="kpi-label">Q1 Total Spend</div>
+        <div class="kpi-value small">$7,224.05</div>
+        <div class="kpi-change">Jan–Mar 2026</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Events & Sponsorships</div>
+        <div class="kpi-value small">$3,770</div>
+        <div class="kpi-change">52.2% of total</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Google Ads</div>
+        <div class="kpi-value small">$2,428</div>
+        <div class="kpi-change">33.6% of total</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Meta Ads</div>
+        <div class="kpi-value small">$659</div>
+        <div class="kpi-change">9.1% of total</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Other Online Ad</div>
+        <div class="kpi-value small">$300</div>
+        <div class="kpi-change">4.2% of total · Tickikids</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Email / Brevo</div>
+        <div class="kpi-value small">$67</div>
+        <div class="kpi-change">0.9% of total · Feb & Mar</div>
+      </div>
+    </div>
+    <div class="two-col">
+      <div class="card">
+        <div class="card-title">Spend by Channel</div>
+        <div class="card-subtitle">Q1 2026 distribution</div>
+        <div class="doughnut-wrap" style="height:280px;">
+          <canvas id="spendDoughnutChart"></canvas>
+          <div class="doughnut-center">
+            <div class="doughnut-center-val">$7,224</div>
+            <div class="doughnut-center-lbl">Q1 Total</div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Monthly Spend Breakdown</div>
+        <div class="card-subtitle">By channel per month</div>
+        <div style="position:relative;height:280px;"><canvas id="spendMonthlyChart"></canvas></div>
+      </div>
+    </div>
+    <div style="margin-top:12px;font-size:11px;color:var(--muted);padding:10px 14px;background:var(--surface);border-radius:8px;">
+      💡 <strong>Note:</strong> Q1 total spend $7,224.05 (Jan $1,646.69 + Feb $1,757.97 + Mar $3,819.39). Events & Sponsorships includes HoneyKids ($2,970), HFSE Dadbodz ($500), Griffins ($300). Other Online Ad = Tickikids ($300).
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ─── 7. CONVERSION & ROI ─── -->
+  <section class="section" id="conversion">
+    <div class="section-header">
+      <div class="section-icon green">📈</div>
+      <div>
+        <div class="section-title">Conversion & ROI</div>
+        <div class="section-subtitle">Lead-to-enrolment funnel & return on ad spend · Q1 2026</div>
+      </div>
+    </div>
+    <div class="kpi-grid" style="margin-bottom:28px;">
+      <div class="kpi-card primary">
+        <div class="kpi-label">Conversion Rate</div>
+        <div class="kpi-value">1.68%</div>
+        <div class="kpi-change">2 enrolments from 119 leads</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">ROAS</div>
+        <div class="kpi-value">3.19x</div>
+        <div class="kpi-change">$23,021 revenue / $7,224 spend</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Cost per Conversion</div>
+        <div class="kpi-value small">$3,612</div>
+        <div class="kpi-change">Total spend ÷ 2 enrolments</div>
+      </div>
+      <div class="kpi-card orange">
+        <div class="kpi-label">Conversion Revenue</div>
+        <div class="kpi-value small">$23,020.80</div>
+        <div class="kpi-change">Q1 2026 enrolment revenue</div>
+      </div>
+    </div>
+    <div class="two-col">
+      <div class="card">
+        <div class="card-title">Cost per Lead by Month</div>
+        <div class="card-subtitle">Marketing spend ÷ Leads generated</div>
+        <div style="position:relative;height:260px;"><canvas id="cplChart"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Marketing Spend vs Conversion Revenue</div>
+        <div class="card-subtitle">Q1 2026 ROI summary</div>
+        <div style="position:relative;height:260px;"><canvas id="roiChart"></canvas></div>
+      </div>
+    </div>
+    <div style="margin-top:12px;font-size:11px;color:var(--muted);padding:10px 14px;background:var(--surface);border-radius:8px;">
+      💡 <strong>Note:</strong> 2 enrolments in Q1 2026 (1 Feb, 1 Mar). Conversion Rate = Enrolments ÷ Total Leads. ROAS = Conversion Revenue ÷ Marketing Spend.
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ─── 8. TOP PERFORMING POSTS ─── -->
+  <section class="section" id="posts">
+    <div class="section-header">
+      <div class="section-icon blue">🏆</div>
+      <div>
+        <div class="section-title">Top Performing Posts</div>
+        <div class="section-subtitle">Ranked by views · Q1 2026 · Facebook</div>
+      </div>
+    </div>
+    <div class="posts-grid">
+
+      <!-- Rank 1 -->
+      <div class="post-card top">
+        <div class="post-card-header">
+          <div class="rank-badge gold">#1</div>
+          <span class="post-platform-tag">📘 Facebook Reel</span>
+        </div>
+        <div class="post-title">"Big News! HFSE International School is now officially EduTrust Certified!"</div>
+        <div class="post-metrics">
+          <div class="post-metric">
+            <div class="post-metric-val primary">7,466</div>
+            <div class="post-metric-lbl">Views</div>
+          </div>
+          <div class="post-metric">
+            <div class="post-metric-val">4,315</div>
+            <div class="post-metric-lbl">Reach</div>
+          </div>
+          <div class="post-metric">
+            <div class="post-metric-val">86,840</div>
+            <div class="post-metric-lbl">Seconds Viewed</div>
+          </div>
+        </div>
+        <a href="https://www.facebook.com/reel/1623184182335662/" target="_blank" rel="noopener" class="post-link">View Post →</a>
+      </div>
+
+      <!-- Rank 2 -->
+      <div class="post-card">
+        <div class="post-card-header">
+          <div class="rank-badge silver">#2</div>
+          <span class="post-platform-tag">📘 Facebook</span>
+        </div>
+        <div class="post-title">"Congratulations, HFSE Champions! Speech & Drama Merit Awards"</div>
+        <div class="post-metrics">
+          <div class="post-metric">
+            <div class="post-metric-val primary">5,983</div>
+            <div class="post-metric-lbl">Views</div>
+          </div>
+          <div class="post-metric">
+            <div class="post-metric-val">1,951</div>
+            <div class="post-metric-lbl">Reach</div>
+          </div>
+        </div>
+        <a href="https://www.facebook.com/hfseinternational/posts/pfbid02BHUzNfMvtTkyyif4xjA2w678nR4eHWobFTe77LTr6yc9sdNKrFikTtn1DnAJx6r8l" target="_blank" rel="noopener" class="post-link">View Post →</a>
+      </div>
+
+      <!-- Rank 3 -->
+      <div class="post-card">
+        <div class="post-card-header">
+          <div class="rank-badge bronze">#3</div>
+          <span class="post-platform-tag">📘 Facebook</span>
+        </div>
+        <div class="post-title">"Friendship Night 2026: Where Memories Shine Bright"</div>
+        <div class="post-metrics">
+          <div class="post-metric">
+            <div class="post-metric-val primary">4,822</div>
+            <div class="post-metric-lbl">Views</div>
+          </div>
+          <div class="post-metric">
+            <div class="post-metric-val">1,837</div>
+            <div class="post-metric-lbl">Reach</div>
+          </div>
+        </div>
+        <a href="https://www.facebook.com/hfseinternational/posts/pfbid02YoY54kUNJ9jx5XewzHQvuKCAZQQDbTP1CPRZeixqLRqPsvi2nvUfcE7FPSvcUHWtl" target="_blank" rel="noopener" class="post-link">View Post →</a>
+      </div>
+
+      <!-- Rank 4 -->
+      <div class="post-card">
+        <div class="post-card-header">
+          <div class="rank-badge plain">#4</div>
+          <span class="post-platform-tag">📘 Facebook</span>
+        </div>
+        <div class="post-title">"Become a Champion for Learners: JOIN OUR H.A.P.I DREAM TEAM!"</div>
+        <div class="post-metrics">
+          <div class="post-metric">
+            <div class="post-metric-val primary">3,267</div>
+            <div class="post-metric-lbl">Views</div>
+          </div>
+          <div class="post-metric">
+            <div class="post-metric-val">1,941</div>
+            <div class="post-metric-lbl">Reach</div>
+          </div>
+        </div>
+        <a href="https://www.facebook.com/hfseinternational/posts/pfbid034ZpZ4KZu34Wm4ZJNCD7aLKJmUuHmKRfwHYijCaPN3YPT927PYPr6cBvA7JbPeAE5l" target="_blank" rel="noopener" class="post-link">View Post →</a>
+      </div>
+
+      <!-- Rank 5 -->
+      <div class="post-card">
+        <div class="post-card-header">
+          <div class="rank-badge plain">#5</div>
+          <span class="post-platform-tag">📘 Facebook Reel</span>
+        </div>
+        <div class="post-title">"Behind the scenes, we have been working on a significant milestone…"</div>
+        <div class="post-metrics">
+          <div class="post-metric">
+            <div class="post-metric-val primary">2,902</div>
+            <div class="post-metric-lbl">Views</div>
+          </div>
+          <div class="post-metric">
+            <div class="post-metric-val">1,639</div>
+            <div class="post-metric-lbl">Reach</div>
+          </div>
+          <div class="post-metric">
+            <div class="post-metric-val">20,451</div>
+            <div class="post-metric-lbl">Seconds Viewed</div>
+          </div>
+        </div>
+        <a href="https://www.facebook.com/reel/931424586242442/" target="_blank" rel="noopener" class="post-link">View Post →</a>
+      </div>
+
+      <!-- Rank 6 -->
+      <div class="post-card">
+        <div class="post-card-header">
+          <div class="rank-badge plain">#6</div>
+          <span class="post-platform-tag">📘 Facebook</span>
+        </div>
+        <div class="post-title">"It's a wrap! Term 1 was filled with learning, growth, and memorable moments…"</div>
+        <div class="post-metrics">
+          <div class="post-metric">
+            <div class="post-metric-val primary">2,874</div>
+            <div class="post-metric-lbl">Views</div>
+          </div>
+          <div class="post-metric">
+            <div class="post-metric-val">1,267</div>
+            <div class="post-metric-lbl">Reach</div>
+          </div>
+        </div>
+        <a href="https://www.facebook.com/hfseinternational/posts/pfbid02Q3vmnkTuEV3A87vpSMPVCEQtN8PbJF7pTGXoitn1X2NC3PhweExmgb1XwNeAB9QEl" target="_blank" rel="noopener" class="post-link">View Post →</a>
+      </div>
+
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ─── 8. RECOMMENDATIONS ─── -->
+  <section class="section" id="recommendations">
+    <div class="section-header">
+      <div class="section-icon orange">💡</div>
+      <div>
+        <div class="section-title">Strategic Recommendations</div>
+        <div class="section-subtitle">Data-driven actions for Q2 2026 based on Q1 performance</div>
+      </div>
+    </div>
+    <div class="reco-grid">
+
+      <div class="reco-card high">
+        <div class="reco-header">
+          <span class="reco-icon">🎓</span>
+          <span class="reco-badge high">High Priority</span>
+        </div>
+        <div class="reco-title">Double Down on EduTrust Content</div>
+        <div class="reco-body">The EduTrust certification reel drove 7,466 views and 86,840 seconds viewed — the highest of any Q1 post and well above average. Create follow-up EduTrust content: parent FAQs, what EduTrust means for students, and testimonial videos.</div>
+        <span class="reco-metric">📊 #1 post: 7,466 views · 86,840 seconds viewed</span>
+      </div>
+
+      <div class="reco-card high">
+        <div class="reco-header">
+          <span class="reco-icon">📸</span>
+          <span class="reco-badge high">High Priority</span>
+        </div>
+        <div class="reco-title">Activate & Grow Instagram</div>
+        <div class="reco-body">Instagram reach (14,586) is only 9% of Facebook's (160,565), yet both audiences share near-identical demographics. Systematically repurpose top Facebook posts as IG Reels. Set a weekly posting cadence with Stories for event coverage.</div>
+        <span class="reco-metric">📊 IG reach = 9% of FB · Same audience demo</span>
+      </div>
+
+      <div class="reco-card high">
+        <div class="reco-header">
+          <span class="reco-icon">💰</span>
+          <span class="reco-badge high">High Priority</span>
+        </div>
+        <div class="reco-title">Measure Event ROI vs Lead Attribution</div>
+        <div class="reco-body">51.7% of Q1 spend ($3,737) went to events and sponsorships — the single largest cost center. However only 12 event walk-in leads were captured. Implement strict lead capture at all events in Q2 to measure true cost-per-lead.</div>
+        <span class="reco-metric">📊 $3,737 events · only 12 walk-in leads captured · 0.84% conversion rate</span>
+      </div>
+
+      <div class="reco-card medium">
+        <div class="reco-header">
+          <span class="reco-icon">💬</span>
+          <span class="reco-badge medium">Medium Priority</span>
+        </div>
+        <div class="reco-title">Strengthen WhatsApp & Form CTAs</div>
+        <div class="reco-body">Contact Us Form (43 leads, 36.1%) and WhatsApp (34 leads, 28.6%) are the top two lead channels. Add a WhatsApp click-to-chat button in every Facebook post caption and email footer. Ensure all form confirmations have an immediate follow-up auto-reply.</div>
+        <span class="reco-metric">📊 Contact Form + WhatsApp = 64.7% of all Q1 leads</span>
+      </div>
+
+      <div class="reco-card medium">
+        <div class="reco-header">
+          <span class="reco-icon">📈</span>
+          <span class="reco-badge medium">Medium Priority</span>
+        </div>
+        <div class="reco-title">Sustain the March Momentum</div>
+        <div class="reco-body">March was the strongest month across all metrics: FB reach +32% vs Feb, FB interactions +411% vs Feb, LinkedIn impressions 6× vs January. Identify and document what drove this surge (EduTrust news, event mix, posting frequency) and replicate the playbook in Q2.</div>
+        <span class="reco-metric">📊 Mar FB interactions: 2,105 vs Jan: 784 (+168%)</span>
+      </div>
+
+      <div class="reco-card medium">
+        <div class="reco-header">
+          <span class="reco-icon">✉️</span>
+          <span class="reco-badge medium">Medium Priority</span>
+        </div>
+        <div class="reco-title">Scale High-Performing Email Formats</div>
+        <div class="reco-body">EduTrust EOI had the highest CTR at 13.92% — nearly 10× the average CTR. The template combined urgency (limited spots), social proof (certification), and a clear CTA. Apply this formula to upcoming Open House and enrollment deadline campaigns.</div>
+        <span class="reco-metric">📊 EduTrust EOI: 13.92% CTR vs avg ~5.3%</span>
+      </div>
+
+      <div class="reco-card insight">
+        <div class="reco-header">
+          <span class="reco-icon">💼</span>
+          <span class="reco-badge insight">Growth Insight</span>
+        </div>
+        <div class="reco-title">Invest More in LinkedIn</div>
+        <div class="reco-body">LinkedIn impressions grew 502% from January (226) to March (1,359) with near-zero incremental spend. This is a high-value channel for reaching Singapore-based parents and education professionals. Increase posting frequency to 3× per week and consider a small sponsored content budget in Q2.</div>
+        <span class="reco-metric">📊 LinkedIn impressions: +502% Jan→Mar · Low cost</span>
+      </div>
+
+    </div>
+  </section>
+
+</main>
+
+<!-- ══════════════════════════════════════════ FOOTER ══ -->
+<footer class="footer">
+  <div class="footer-logo">
+    <img src="LOGO_SOLID (3).png" alt="HFSE International School" onerror="this.style.display='none'" />
+  </div>
+  <div class="footer-text">
+    <strong>HFSE International School</strong> — Q1 2026 Marketing Performance Dashboard<br>
+    Generated April 14, 2026 &nbsp;·&nbsp;
+    Data: Meta Business Suite · Google Analytics 4 (hfse.edu.sg &amp; isa.hfse.edu.sg) · HFSE IS Internal CRM · Brevo Email Platform
+  </div>
+  <div style="font-size:11px;color:var(--muted);">Prepared by Neri Lopez | Marketing Research &amp; Development</div>
+</footer>
+
+<!-- ══════════════════════════════════════════ SCRIPTS ══ -->
+<script>
+// ── Platform tab switching ──────────────────────────────────────
+document.querySelectorAll('.platform-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.platform-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.platform-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById(tab.dataset.target).classList.add('active');
+    tab.classList.add('active');
+  });
+});
+
+// ── Month filter data ───────────────────────────────────────────
+const socialData = {
+  all: {
+    labels: ['January', 'February', 'March'],
+    fb:  { views: [90576,89500,141988],  reach: [34605,54337,71623], interactions: [784,412,2105],    clicks: [363,628,828],    visits: [5876,3592,5945] },
+    ig:  { views: [17532,9143,16922],    reach: [6412,3328,4846],   interactions: [326,189,595],     clicks: [63,23,13],       visits: [494,303,483] },
+    li:  { impressions: [226,350,1359],  clicks: [23,13,75],        reactions: [3,8,34] }
+  },
+  jan: {
+    labels: ['January'],
+    fb:  { views: [90576],  reach: [34605], interactions: [784],  clicks: [363], visits: [5876] },
+    ig:  { views: [17532],  reach: [6412],  interactions: [326],  clicks: [63],  visits: [494] },
+    li:  { impressions: [226], clicks: [23], reactions: [3] }
+  },
+  feb: {
+    labels: ['February'],
+    fb:  { views: [89500],  reach: [54337], interactions: [412],  clicks: [628], visits: [3592] },
+    ig:  { views: [9143],   reach: [3328],  interactions: [189],  clicks: [23],  visits: [303] },
+    li:  { impressions: [350], clicks: [13], reactions: [8] }
+  },
+  mar: {
+    labels: ['March'],
+    fb:  { views: [141988], reach: [71623], interactions: [2105], clicks: [828], visits: [5945] },
+    ig:  { views: [16922],  reach: [4846],  interactions: [595],  clicks: [13],  visits: [483] },
+    li:  { impressions: [1359], clicks: [75], reactions: [34] }
+  }
+};
+
+const chartDefaults = {
+  responsive: true,
+  maintainAspectRatio: false,
+  animation: { duration: 500 },
+  plugins: { legend: { position: 'bottom', labels: { font: { size: 11 }, boxWidth: 12, padding: 12 } } },
+  scales: {
+    x: { grid: { display: false }, ticks: { font: { size: 11 } } },
+    y: { grid: { color: '#f0f0f0' }, border: { dash: [4,4] }, ticks: { font: { size: 11 } } }
+  }
+};
+
+function numFmt(v) {
+  if (v >= 1000) return (v/1000).toFixed(v % 1000 === 0 ? 0 : 1) + 'K';
+  return v;
+}
+
+// ── FB Trend Chart ──────────────────────────────────────────────
+const fbTrendChart = new Chart(document.getElementById('fbTrendChart'), {
+  type: 'bar',
+  data: {
+    labels: socialData.all.labels,
+    datasets: [
+      { label: 'Views',  data: socialData.all.fb.views,  backgroundColor: 'rgba(31,69,199,0.15)', borderColor: '#1f45c7', borderWidth: 2, borderRadius: 6 },
+      { label: 'Reach',  data: socialData.all.fb.reach,  backgroundColor: '#1f45c7', borderRadius: 6 }
+    ]
+  },
+  options: { ...JSON.parse(JSON.stringify(chartDefaults)), plugins: { ...JSON.parse(JSON.stringify(chartDefaults)).plugins },
+    scales: { x: { grid: { display: false } }, y: { grid: { color: '#f0f0f0' }, border: { dash: [4,4] }, ticks: { callback: v => numFmt(v), font: { size: 11 } } } }
+  }
+});
+
+// ── FB Engagement Chart ─────────────────────────────────────────
+const fbEngagementChart = new Chart(document.getElementById('fbEngagementChart'), {
+  type: 'bar',
+  data: {
+    labels: socialData.all.labels,
+    datasets: [
+      { label: 'Interactions', data: socialData.all.fb.interactions, backgroundColor: '#fd8735', borderRadius: 6 },
+      { label: 'Link Clicks',  data: socialData.all.fb.clicks,       backgroundColor: '#fdc280', borderRadius: 6 },
+      { label: 'Visits',       data: socialData.all.fb.visits,       backgroundColor: '#e5e8f0', borderRadius: 6 }
+    ]
+  },
+  options: { ...JSON.parse(JSON.stringify(chartDefaults)),
+    scales: { x: { grid: { display: false } }, y: { grid: { color: '#f0f0f0' }, border: { dash: [4,4] }, ticks: { callback: v => numFmt(v), font: { size: 11 } } } }
+  }
+});
+
+// ── IG Trend Chart ──────────────────────────────────────────────
+const igTrendChart = new Chart(document.getElementById('igTrendChart'), {
+  type: 'bar',
+  data: {
+    labels: socialData.all.labels,
+    datasets: [
+      { label: 'Views', data: socialData.all.ig.views, backgroundColor: 'rgba(240,148,51,0.2)', borderColor: '#f09433', borderWidth: 2, borderRadius: 6 },
+      { label: 'Reach', data: socialData.all.ig.reach, backgroundColor: '#bc1888', borderRadius: 6 }
+    ]
+  },
+  options: { ...JSON.parse(JSON.stringify(chartDefaults)),
+    scales: { x: { grid: { display: false } }, y: { grid: { color: '#f0f0f0' }, border: { dash: [4,4] }, ticks: { callback: v => numFmt(v), font: { size: 11 } } } }
+  }
+});
+
+// ── IG Engagement Chart ─────────────────────────────────────────
+const igEngagementChart = new Chart(document.getElementById('igEngagementChart'), {
+  type: 'bar',
+  data: {
+    labels: socialData.all.labels,
+    datasets: [
+      { label: 'Interactions', data: socialData.all.ig.interactions, backgroundColor: '#f09433', borderRadius: 6 },
+      { label: 'Link Clicks',  data: socialData.all.ig.clicks,       backgroundColor: '#fdc280', borderRadius: 6 },
+      { label: 'Visits',       data: socialData.all.ig.visits,       backgroundColor: '#e5e8f0', borderRadius: 6 }
+    ]
+  },
+  options: { ...JSON.parse(JSON.stringify(chartDefaults)),
+    scales: { x: { grid: { display: false } }, y: { grid: { color: '#f0f0f0' }, border: { dash: [4,4] }, ticks: { callback: v => numFmt(v), font: { size: 11 } } } }
+  }
+});
+
+// ── LinkedIn Chart ──────────────────────────────────────────────
+const liChart = new Chart(document.getElementById('liChart'), {
+  type: 'bar',
+  data: {
+    labels: socialData.all.labels,
+    datasets: [
+      { label: 'Impressions', data: socialData.all.li.impressions, backgroundColor: '#0A66C2', borderRadius: 6 },
+      { label: 'Clicks',      data: socialData.all.li.clicks,      backgroundColor: '#6aaad6', borderRadius: 6 },
+      { label: 'Reactions',   data: socialData.all.li.reactions,   backgroundColor: '#c8dff0', borderRadius: 6 }
+    ]
+  },
+  options: { ...JSON.parse(JSON.stringify(chartDefaults)),
+    scales: { x: { grid: { display: false } }, y: { grid: { color: '#f0f0f0' }, border: { dash: [4,4] }, ticks: { font: { size: 11 } } } }
+  }
+});
+
+// ── Month filter button logic ───────────────────────────────────
+document.querySelectorAll('.month-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.month-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const period = btn.dataset.period;
+    const d = socialData[period];
+
+    [fbTrendChart, fbEngagementChart, igTrendChart, igEngagementChart].forEach(c => {
+      c.data.labels = d.labels;
+    });
+
+    fbTrendChart.data.datasets[0].data      = d.fb.views;
+    fbTrendChart.data.datasets[1].data      = d.fb.reach;
+    fbEngagementChart.data.datasets[0].data = d.fb.interactions;
+    fbEngagementChart.data.datasets[1].data = d.fb.clicks;
+    fbEngagementChart.data.datasets[2].data = d.fb.visits;
+    igTrendChart.data.datasets[0].data      = d.ig.views;
+    igTrendChart.data.datasets[1].data      = d.ig.reach;
+    igEngagementChart.data.datasets[0].data = d.ig.interactions;
+    igEngagementChart.data.datasets[1].data = d.ig.clicks;
+    igEngagementChart.data.datasets[2].data = d.ig.visits;
+
+    [fbTrendChart, fbEngagementChart, igTrendChart, igEngagementChart].forEach(c => c.update());
+  });
+});
+
+// ── Top Pages Chart (horizontal bar) ───────────────────────────
+new Chart(document.getElementById('topPagesChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Home','Job Opportunities','Submit Application','About Us','HFSE Youngstarters','Contact Us','Career Opp. SG'],
+    datasets: [{
+      label: 'Page Views',
+      data: [10807, 8683, 4055, 2575, 2120, 1476, 1410],
+      backgroundColor: ['#1f45c7','#3d62d4','#5b7ee1','#7999ee','#97b5f4','#b5d0fa','#d3ecff'],
+      borderRadius: 5
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true,
+    maintainAspectRatio: false,
+    animation: { duration: 600 },
+    plugins: { legend: { display: false } },
+    scales: {
+      x: { grid: { color: '#f0f0f0' }, border: { dash: [4,4] }, ticks: { font: { size: 11 }, callback: v => numFmt(v) } },
+      y: { grid: { display: false }, ticks: { font: { size: 11 } } }
+    }
+  }
+});
+
+// ── ISA Daily Active Users (line chart) ────────────────────────
+(function() {
+  const isaData = [50,50,59,44,59,46,66,96,57,25,29,82,56,56,58,83,64,48,100,77,81,68,78,86,51,93,91,80,59,93,41,18,70,109,84,84,70,69,59,71,84,66,70,85,48,58,55,58,48,68,74,56,48,54,64,67,79,85,38,59,63,76,73,81,81,75,58,117,66,91,63,70,61,49,74,83,73,86,65,45,50,60,69,67,62,63,50,58,72,67];
+  const months = ['Jan','Feb','Mar'];
+  const monthStarts = [0, 31, 59];
+  const labels = isaData.map((_, i) => {
+    const mi = monthStarts.findIndex((s, idx) => s <= i && (idx === 2 || monthStarts[idx+1] > i));
+    const day = i - monthStarts[mi] + 1;
+    return day === 1 ? months[mi] + ' 1' : (day % 7 === 0 ? months[mi] + ' ' + day : '');
+  });
+
+  new Chart(document.getElementById('isaChart'), {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'Daily Active Users',
+        data: isaData,
+        borderColor: '#1f45c7',
+        backgroundColor: 'rgba(31,69,199,0.07)',
+        fill: true,
+        tension: 0.35,
+        pointRadius: 0,
+        pointHoverRadius: 5,
+        borderWidth: 2
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: { duration: 800 },
+      plugins: { legend: { display: false }, tooltip: { callbacks: { title: (items) => 'Day ' + (items[0].dataIndex + 1) } } },
+      scales: {
+        x: { grid: { display: false }, ticks: { font: { size: 10 }, maxRotation: 0 } },
+        y: { grid: { color: '#f0f0f0' }, border: { dash: [4,4] }, beginAtZero: false, ticks: { font: { size: 11 } } }
+      }
+    }
+  });
+})();
+
+// ── Leads Stacked Bar Chart ─────────────────────────────────────
+new Chart(document.getElementById('leadsChart'), {
+  type: 'bar',
+  data: {
+    labels: ['January', 'February', 'March'],
+    datasets: [
+      { label: 'Contact Us Form',    data: [23,10,10], backgroundColor: '#1f45c7', borderRadius: 0 },
+      { label: 'WhatsApp',           data: [19,10, 5], backgroundColor: '#25D366', borderRadius: 0 },
+      { label: 'Open-House Form',    data: [ 0, 5, 8], backgroundColor: '#97b5f4', borderRadius: 0 },
+      { label: 'Event Walk-ins',     data: [ 2, 1, 9], backgroundColor: '#6366f1', borderRadius: 0 },
+      { label: 'Facebook Messenger', data: [ 1, 8, 2], backgroundColor: '#0084FF', borderRadius: 0 },
+      { label: 'Phone Call',         data: [ 0, 2, 2], backgroundColor: '#fd8735', borderRadius: 0 },
+      { label: 'Email',              data: [ 0, 1, 1], backgroundColor: '#e2e8f0', borderRadius: 0 }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    animation: { duration: 600 },
+    plugins: { legend: { position: 'bottom', labels: { font: { size: 11 }, boxWidth: 12, padding: 10 } } },
+    scales: {
+      x: { stacked: true, grid: { display: false } },
+      y: { stacked: true, beginAtZero: true, grid: { color: '#f0f0f0' }, border: { dash: [4,4] }, ticks: { font: { size: 11 } } }
+    }
+  }
+});
+
+// ── Email Open Rate vs CTR Chart ────────────────────────────────
+new Chart(document.getElementById('emailChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Welcome\nAY26', "Founder's\nMsg", 'Jan\nHighlights', 'Virtual\nOH', 'VOH\nFollow-up', 'Feb\nHighlights', 'EduTrust\nAnn.', 'EduTrust\nEOI ⭐', 'Open\nHouse'],
+    datasets: [
+      { label: 'Open Rate (%)', data: [69.42, 60.88, 57.1, 37.66, 49.13, 56.85, 56.44, 64.62, 36.51], backgroundColor: '#1f45c7', borderRadius: 5 },
+      { label: 'CTR (%)',       data: [0, 0.68, 5.03, 4.6, 0.87, 8.63, 9.41, 13.92, 2.38],           backgroundColor: '#fd8735', borderRadius: 5 }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    animation: { duration: 600 },
+    plugins: { legend: { position: 'bottom', labels: { font: { size: 11 }, boxWidth: 12 } } },
+    scales: {
+      x: { grid: { display: false }, ticks: { font: { size: 10 } } },
+      y: { grid: { color: '#f0f0f0' }, border: { dash: [4,4] }, ticks: { callback: v => v + '%', font: { size: 11 } } }
+    }
+  }
+});
+
+// ── Spend Doughnut Chart ────────────────────────────────────────
+new Chart(document.getElementById('spendDoughnutChart'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Events & Sponsorships', 'Google Ads', 'Meta Ads', 'Other Online Ad', 'Email / Brevo'],
+    datasets: [{
+      data: [3770, 2428.33, 659.06, 300, 66.66],
+      backgroundColor: ['#1f45c7', '#fd8735', '#fdc280', '#7c3aed', '#97b5f4'],
+      borderWidth: 3,
+      borderColor: '#ffffff',
+      hoverOffset: 8
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    animation: { duration: 800 },
+    cutout: '68%',
+    plugins: {
+      legend: { position: 'bottom', labels: { font: { size: 11 }, boxWidth: 12, padding: 12 } },
+      tooltip: { callbacks: { label: ctx => ' $' + ctx.raw.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) } }
+    }
+  }
+});
+
+// ── Spend Monthly Stacked Chart ─────────────────────────────────
+new Chart(document.getElementById('spendMonthlyChart'), {
+  type: 'bar',
+  data: {
+    labels: ['January', 'February', 'March'],
+    datasets: [
+      { label: 'Google Ads',          data: [1433.35, 564.42, 430.56], backgroundColor: '#fd8735', borderRadius: 0 },
+      { label: 'Meta Ads',            data: [213.34,  210.22, 235.50], backgroundColor: '#fdc280', borderRadius: 0 },
+      { label: 'Other Online Ad',     data: [0,       150,    150    ], backgroundColor: '#7c3aed', borderRadius: 0 },
+      { label: 'Email / Brevo',       data: [0,       33.33,  33.33  ], backgroundColor: '#97b5f4', borderRadius: 0 },
+      { label: 'Events/Sponsorships', data: [0,       800,    2970   ], backgroundColor: '#1f45c7', borderRadius: 0 }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    animation: { duration: 600 },
+    plugins: { legend: { position: 'bottom', labels: { font: { size: 11 }, boxWidth: 12, padding: 10 } } },
+    scales: {
+      x: { stacked: true, grid: { display: false }, ticks: { font: { size: 11 } } },
+      y: { stacked: true, beginAtZero: true, grid: { color: '#f0f0f0' }, border: { dash: [4,4] },
+           ticks: { font: { size: 11 }, callback: v => '$' + v.toLocaleString() } }
+    }
+  }
+});
+
+// ── Cost per Lead Chart (Conversion section) ────────────────────
+new Chart(document.getElementById('cplChart'), {
+  type: 'bar',
+  data: {
+    labels: ['January', 'February', 'March'],
+    datasets: [{
+      label: 'Cost per Lead',
+      data: [36.59, 47.51, 103.23],
+      backgroundColor: ['#1f45c7', '#fd8735', '#dc2626'],
+      borderRadius: 6
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    animation: { duration: 600 },
+    plugins: {
+      legend: { display: false },
+      tooltip: { callbacks: { label: ctx => ' $' + ctx.raw.toFixed(2) + ' per lead' } }
+    },
+    scales: {
+      x: { grid: { display: false }, ticks: { font: { size: 11 } } },
+      y: { beginAtZero: true, grid: { color: '#f0f0f0' }, border: { dash: [4,4] },
+           ticks: { font: { size: 11 }, callback: v => '$' + v } }
+    }
+  }
+});
+
+// ── Spend vs Revenue Chart (Conversion section) ─────────────────
+new Chart(document.getElementById('roiChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Marketing Spend', 'Conversion Revenue'],
+    datasets: [{
+      data: [7224.05, 23020.80],
+      backgroundColor: ['#fd8735', '#16a34a'],
+      borderRadius: 8
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    animation: { duration: 600 },
+    plugins: {
+      legend: { display: false },
+      tooltip: { callbacks: { label: ctx => ' $' + ctx.raw.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) } }
+    },
+    scales: {
+      x: { grid: { display: false }, ticks: { font: { size: 12, weight: '600' } } },
+      y: { beginAtZero: true, grid: { color: '#f0f0f0' }, border: { dash: [4,4] },
+           ticks: { font: { size: 11 }, callback: v => '$' + v.toLocaleString() } }
+    }
+  }
+});
+
+// ── Email table "Show all" toggle ───────────────────────────────
+const showAllBtn = document.getElementById('showAllBtn');
+let expanded = false;
+showAllBtn.addEventListener('click', () => {
+  expanded = !expanded;
+  document.querySelectorAll('.email-row-hidden').forEach(row => {
+    row.style.display = expanded ? 'table-row' : 'none';
+  });
+  showAllBtn.textContent = expanded ? '↑ Show fewer campaigns' : 'Show all 9 campaigns ↓';
+});
+</script>
+
+</body>
+</html>
